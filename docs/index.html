@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog - Craftoraweb Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #ede9fe;
+            --primary-dark: #5b21b6;
+            --blue: #2563eb;
+            --blue-light: #dbeafe;
+            --cyan: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --white: #ffffff;
+            --bg: #f8faff;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --text: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+        img { display:block; max-width:100%; }
+        a { text-decoration:none; color:inherit; }
+        button { font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; border:none; outline:none; }
+        input, textarea, select { font-family:'Plus Jakarta Sans',sans-serif; outline:none; }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:#f1f1f1; }
+        ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:3px; }
+
+        /* ===== HEADER ===== */
+        header {
+            position:sticky; top:0; z-index:500;
+            background:rgba(255,255,255,0.92);
+            backdrop-filter:blur(16px);
+            border-bottom:1px solid var(--border);
+            box-shadow:var(--shadow);
+        }
+        .header-inner {
+            max-width:1200px; margin:0 auto; padding:0 1.5rem;
+            display:flex; align-items:center; justify-content:space-between;
+            height:64px; gap:1rem;
+        }
+        .logo { display:flex; align-items:center; gap:0.6rem; }
+        .logo-icon {
+            width:36px; height:36px; border-radius:10px;
+            background:linear-gradient(135deg,var(--primary),var(--blue));
+            display:flex; align-items:center; justify-content:center;
+            color:white; font-size:1rem; font-weight:800; flex-shrink:0;
+        }
+        .logo-text { font-size:1.1rem; font-weight:800; color:var(--text); }
+        .logo-text span { color:var(--primary); }
+
+        .header-search {
+            flex:1; max-width:400px; position:relative;
+            display:flex; align-items:center;
+        }
+        .header-search input {
+            width:100%; padding:0.5rem 1rem 0.5rem 2.5rem;
+            border:1.5px solid var(--border); border-radius:var(--radius-full);
+            font-size:0.875rem; background:var(--bg);
+            transition:border-color 0.2s, box-shadow 0.2s;
+        }
+        .header-search input:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-light); }
+        .header-search .search-icon { position:absolute; left:0.8rem; color:var(--text-light); font-size:1rem; }
+
+        .header-actions { display:flex; align-items:center; gap:0.75rem; }
+        .btn-wa {
+            display:flex; align-items:center; gap:0.4rem;
+            padding:0.5rem 1rem; border-radius:var(--radius-full);
+            background:#25d366; color:white; font-size:0.8rem; font-weight:700;
+            transition:all 0.2s; white-space:nowrap;
+        }
+        .btn-wa:hover { background:#1da855; transform:translateY(-1px); }
+
+        .cart-btn {
+            position:relative; width:42px; height:42px; border-radius:var(--radius-sm);
+            background:var(--primary-light); color:var(--primary); font-size:1.2rem;
+            display:flex; align-items:center; justify-content:center;
+            transition:all 0.2s; border:none;
+        }
+        .cart-btn:hover { background:var(--primary); color:white; transform:translateY(-1px); }
+        .cart-badge {
+            position:absolute; top:-6px; right:-6px;
+            width:20px; height:20px; border-radius:50%;
+            background:var(--danger); color:white;
+            font-size:0.65rem; font-weight:700;
+            display:flex; align-items:center; justify-content:center;
+            border:2px solid white; display:none;
+        }
+        .cart-badge.show { display:flex; animation:pop 0.3s ease; }
+        @keyframes pop { 0%{transform:scale(0);} 70%{transform:scale(1.2);} 100%{transform:scale(1);} }
+
+        /* ===== HERO ===== */
+        .hero {
+            background:linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #f0f9ff 100%);
+            padding:3rem 1.5rem; text-align:center; border-bottom:1px solid var(--border);
+            position:relative; overflow:hidden;
+        }
+        .hero::before {
+            content:''; position:absolute; width:400px; height:400px;
+            background:radial-gradient(circle,rgba(124,58,237,0.08),transparent);
+            top:-100px; right:-100px; border-radius:50%;
+        }
+        .hero::after {
+            content:''; position:absolute; width:300px; height:300px;
+            background:radial-gradient(circle,rgba(37,99,235,0.06),transparent);
+            bottom:-50px; left:-50px; border-radius:50%;
+        }
+        .hero-inner { max-width:600px; margin:0 auto; position:relative; z-index:1; }
+        .hero-badge {
+            display:inline-flex; align-items:center; gap:0.4rem;
+            background:var(--primary-light); color:var(--primary);
+            padding:0.35rem 1rem; border-radius:var(--radius-full);
+            font-size:0.75rem; font-weight:700; letter-spacing:0.5px;
+            margin-bottom:1rem; text-transform:uppercase;
+        }
+        .hero h1 { font-size:clamp(1.6rem,4vw,2.5rem); font-weight:800; line-height:1.2; margin-bottom:0.75rem; }
+        .hero h1 span { background:linear-gradient(135deg,var(--primary),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .hero p { color:var(--text-muted); font-size:0.95rem; line-height:1.7; margin-bottom:1.5rem; }
+        .hero-stats { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; }
+        .hero-stat { text-align:center; }
+        .hero-stat-num { font-size:1.5rem; font-weight:800; color:var(--primary); }
+        .hero-stat-label { font-size:0.75rem; color:var(--text-muted); }
+
+        /* ===== CATEGORIES ===== */
+        .categories-wrap { background:white; border-bottom:1px solid var(--border); position:sticky; top:64px; z-index:400; }
+        .categories {
+            max-width:1200px; margin:0 auto; padding:0 1.5rem;
+            display:flex; gap:0.5rem; overflow-x:auto; padding-top:0.75rem; padding-bottom:0.75rem;
+            scrollbar-width:none;
+        }
+        .categories::-webkit-scrollbar { display:none; }
+        .cat-pill {
+            padding:0.45rem 1.1rem; border-radius:var(--radius-full); border:1.5px solid var(--border);
+            background:white; color:var(--text-muted); font-size:0.8rem; font-weight:600;
+            white-space:nowrap; cursor:pointer; transition:all 0.2s;
+            display:flex; align-items:center; gap:0.4rem;
+        }
+        .cat-pill:hover { border-color:var(--primary); color:var(--primary); }
+        .cat-pill.active { background:var(--primary); border-color:var(--primary); color:white; box-shadow:0 4px 12px rgba(124,58,237,0.3); }
+
+        /* ===== PRODUCTS ===== */
+        .products-section { max-width:1200px; margin:0 auto; padding:2rem 1.5rem; }
+        .products-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem; }
+        .products-count { font-size:0.85rem; color:var(--text-muted); }
+        .sort-select { padding:0.45rem 0.8rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:0.8rem; background:white; color:var(--text); cursor:pointer; }
+        .sort-select:focus { border-color:var(--primary); }
+
+        .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.25rem; }
+
+        .product-card {
+            background:white; border-radius:var(--radius-lg); border:1.5px solid var(--border);
+            overflow:hidden; transition:all 0.25s ease; cursor:pointer;
+            box-shadow:var(--shadow);
+        }
+        .product-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:rgba(124,58,237,0.2); }
+
+        .product-img { aspect-ratio:4/3; overflow:hidden; position:relative; background:linear-gradient(135deg,#f0f4ff,#faf5ff); }
+        .product-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; }
+        .product-card:hover .product-img img { transform:scale(1.06); }
+        .product-badge {
+            position:absolute; top:0.75rem; left:0.75rem;
+            padding:0.25rem 0.65rem; border-radius:var(--radius-full);
+            font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+        }
+        .badge-new { background:#dcfce7; color:#16a34a; }
+        .badge-hot { background:#fee2e2; color:#dc2626; }
+        .badge-best { background:#fef3c7; color:#d97706; }
+        .product-wishlist {
+            position:absolute; top:0.75rem; right:0.75rem;
+            width:32px; height:32px; border-radius:50%; background:white;
+            display:flex; align-items:center; justify-content:center; font-size:0.9rem;
+            box-shadow:var(--shadow-md); transition:all 0.2s; border:none; cursor:pointer;
+        }
+        .product-wishlist:hover { transform:scale(1.15); }
+        .product-wishlist.liked { background:#fee2e2; }
+
+        .product-body { padding:1.1rem; }
+        .product-category { font-size:0.7rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.3rem; }
+        .product-name { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.4rem; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .product-rating { display:flex; align-items:center; gap:0.3rem; margin-bottom:0.6rem; }
+        .stars { color:#f59e0b; font-size:0.75rem; }
+        .rating-num { font-size:0.75rem; color:var(--text-muted); }
+        .product-desc { font-size:0.8rem; color:var(--text-muted); line-height:1.5; margin-bottom:0.8rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .product-footer { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; }
+        .product-price { font-size:1.1rem; font-weight:800; color:var(--primary); }
+        .product-price-old { font-size:0.75rem; color:var(--text-light); text-decoration:line-through; margin-top:0.1rem; }
+        .btn-cart {
+            display:flex; align-items:center; gap:0.4rem;
+            padding:0.5rem 0.9rem; border-radius:var(--radius-sm);
+            background:var(--primary); color:white; font-size:0.78rem; font-weight:700;
+            transition:all 0.2s; border:none; white-space:nowrap;
+        }
+        .btn-cart:hover { background:var(--primary-dark); transform:translateY(-1px); }
+        .btn-cart.added { background:var(--success); }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state { text-align:center; padding:4rem 2rem; color:var(--text-muted); }
+        .empty-state .empty-icon { font-size:4rem; margin-bottom:1rem; }
+        .empty-state h3 { font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+
+        /* ===== CART SIDEBAR ===== */
+        .cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:800; opacity:0; visibility:hidden; transition:all 0.3s; backdrop-filter:blur(2px); }
+        .cart-overlay.open { opacity:1; visibility:visible; }
+        .cart-sidebar {
+            position:fixed; top:0; right:-420px; width:420px; max-width:100vw; height:100%;
+            background:white; z-index:900; display:flex; flex-direction:column;
+            box-shadow:var(--shadow-xl); transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+        .cart-sidebar.open { right:0; }
+        .cart-header { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .cart-title { font-size:1.1rem; font-weight:800; display:flex; align-items:center; gap:0.5rem; }
+        .cart-close { width:36px; height:36px; border-radius:var(--radius-sm); background:var(--bg); border:none; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+        .cart-close:hover { background:var(--border); }
+        .cart-body { flex:1; overflow-y:auto; padding:1rem 1.5rem; }
+        .cart-empty { text-align:center; padding:3rem 1rem; color:var(--text-muted); }
+        .cart-empty-icon { font-size:3rem; margin-bottom:1rem; }
+        .cart-item { display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+        .cart-item-img { width:70px; height:70px; border-radius:var(--radius-sm); overflow:hidden; flex-shrink:0; background:var(--bg); }
+        .cart-item-img img { width:100%; height:100%; object-fit:cover; }
+        .cart-item-info { flex:1; min-width:0; }
+        .cart-item-name { font-size:0.88rem; font-weight:700; margin-bottom:0.3rem; line-height:1.3; }
+        .cart-item-cat { font-size:0.7rem; color:var(--primary); font-weight:600; text-transform:uppercase; margin-bottom:0.5rem; }
+        .cart-item-bottom { display:flex; align-items:center; justify-content:space-between; }
+        .cart-item-price { font-size:0.95rem; font-weight:800; color:var(--primary); }
+        .qty-controls { display:flex; align-items:center; gap:0.5rem; }
+        .qty-btn { width:28px; height:28px; border-radius:var(--radius-sm); border:1.5px solid var(--border); background:white; font-size:1rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; color:var(--text); }
+        .qty-btn:hover { border-color:var(--primary); color:var(--primary); }
+        .qty-num { font-size:0.88rem; font-weight:700; min-width:20px; text-align:center; }
+        .cart-item-del { color:var(--text-light); font-size:1.1rem; cursor:pointer; padding:0.25rem; transition:color 0.2s; background:none; border:none; flex-shrink:0; }
+        .cart-item-del:hover { color:var(--danger); }
+
+        .cart-footer { padding:1.25rem 1.5rem; border-top:1px solid var(--border); flex-shrink:0; background:white; }
+        .cart-subtotal { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; font-size:0.85rem; color:var(--text-muted); }
+        .cart-total { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; padding-top:0.5rem; border-top:1.5px solid var(--border); }
+        .cart-total-label { font-size:1rem; font-weight:700; }
+        .cart-total-num { font-size:1.25rem; font-weight:800; color:var(--primary); }
+        .btn-checkout { width:100%; padding:0.9rem; border-radius:var(--radius-sm); border:none; cursor:pointer; background:linear-gradient(135deg,var(--primary),var(--blue)); color:white; font-size:0.95rem; font-weight:800; letter-spacing:0.5px; transition:all 0.2s; box-shadow:0 4px 15px rgba(124,58,237,0.4); }
+        .btn-checkout:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(124,58,237,0.5); }
+        .btn-clear-cart { width:100%; padding:0.6rem; border-radius:var(--radius-sm); border:1.5px solid var(--border); cursor:pointer; background:white; color:var(--text-muted); font-size:0.8rem; font-weight:600; margin-top:0.5rem; transition:all 0.2s; }
+        .btn-clear-cart:hover { border-color:var(--danger); color:var(--danger); }
+
+        /* ===== MODAL ===== */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:all 0.3s; padding:1rem; backdrop-filter:blur(4px); }
+        .modal-overlay.open { opacity:1; visibility:visible; }
+        .modal { background:white; border-radius:var(--radius-lg); width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:var(--shadow-xl); transform:scale(0.95); transition:transform 0.3s; }
+        .modal-overlay.open .modal { transform:scale(1); }
+
+        /* Product Modal */
+        .pmodal-img { width:100%; aspect-ratio:16/9; object-fit:cover; }
+        .pmodal-body { padding:1.5rem; }
+        .pmodal-cat { font-size:0.7rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.5rem; }
+        .pmodal-name { font-size:1.4rem; font-weight:800; margin-bottom:0.5rem; }
+        .pmodal-rating { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; }
+        .pmodal-desc { font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin-bottom:1.25rem; }
+        .pmodal-features { margin-bottom:1.25rem; }
+        .pmodal-features h4 { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); margin-bottom:0.75rem; }
+        .feature-list { display:flex; flex-direction:column; gap:0.4rem; }
+        .feature-item { display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; }
+        .feature-item .check { color:var(--success); font-size:0.9rem; }
+        .pmodal-footer { display:flex; align-items:center; justify-content:space-between; padding-top:1rem; border-top:1px solid var(--border); }
+        .pmodal-price-wrap {}
+        .pmodal-price { font-size:1.6rem; font-weight:800; color:var(--primary); }
+        .pmodal-price-old { font-size:0.85rem; color:var(--text-light); text-decoration:line-through; }
+        .pmodal-actions { display:flex; gap:0.5rem; }
+        .btn-modal-cart { padding:0.7rem 1.4rem; border-radius:var(--radius-sm); background:var(--primary); color:white; font-size:0.85rem; font-weight:700; border:none; cursor:pointer; transition:all 0.2s; }
+        .btn-modal-cart:hover { background:var(--primary-dark); }
+        .btn-modal-wa { padding:0.7rem 1.2rem; border-radius:var(--radius-sm); background:#25d366; color:white; font-size:0.85rem; font-weight:700; border:none; cursor:pointer; transition:all 0.2s; }
+        .btn-modal-wa:hover { background:#1da855; }
+        .modal-close-btn { position:sticky; top:0.75rem; float:right; margin:0.75rem 0.75rem 0 0; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.9); border:1px solid var(--border); cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; z-index:10; box-shadow:var(--shadow); }
+
+        /* Checkout Modal */
+        .checkout-modal { max-width:560px; }
+        .checkout-header { padding:1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+        .checkout-header h2 { font-size:1.2rem; font-weight:800; }
+        .checkout-body { padding:1.5rem; }
+        .checkout-section { margin-bottom:1.5rem; }
+        .checkout-section h3 { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
+        .form-group { margin-bottom:1rem; }
+        .form-label { display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem; }
+        .form-label span { color:var(--danger); }
+        .form-input, .form-select, .form-textarea {
+            width:100%; padding:0.7rem 0.9rem; border:1.5px solid var(--border);
+            border-radius:var(--radius-sm); font-size:0.875rem; color:var(--text);
+            background:white; transition:all 0.2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-light); }
+        .form-textarea { height:80px; resize:none; }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+
+        .order-summary { background:var(--bg); border-radius:var(--radius-sm); padding:1rem; margin-bottom:1rem; }
+        .order-item { display:flex; justify-content:space-between; align-items:center; font-size:0.85rem; padding:0.4rem 0; }
+        .order-item-name { color:var(--text-muted); flex:1; margin-right:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .order-item-price { font-weight:700; flex-shrink:0; }
+        .order-divider { height:1px; background:var(--border); margin:0.5rem 0; }
+        .order-total-row { display:flex; justify-content:space-between; align-items:center; }
+        .order-total-label { font-weight:700; }
+        .order-total-price { font-size:1.2rem; font-weight:800; color:var(--primary); }
+
+        .payment-options { display:flex; flex-direction:column; gap:0.5rem; }
+        .payment-opt { display:flex; align-items:center; gap:0.75rem; padding:0.85rem 1rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); cursor:pointer; transition:all 0.2s; }
+        .payment-opt:hover { border-color:var(--primary); }
+        .payment-opt.selected { border-color:var(--primary); background:var(--primary-light); }
+        .payment-opt input[type="radio"] { accent-color:var(--primary); }
+        .payment-opt-icon { font-size:1.3rem; }
+        .payment-opt-info { flex:1; }
+        .payment-opt-name { font-size:0.88rem; font-weight:700; }
+        .payment-opt-desc { font-size:0.75rem; color:var(--text-muted); }
+
+        .btn-place-order { width:100%; padding:1rem; border-radius:var(--radius-sm); border:none; cursor:pointer; background:linear-gradient(135deg,var(--primary),var(--blue)); color:white; font-size:1rem; font-weight:800; transition:all 0.2s; box-shadow:0 4px 15px rgba(124,58,237,0.4); margin-top:1rem; }
+        .btn-place-order:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(124,58,237,0.5); }
+        .btn-place-order:disabled { opacity:0.7; transform:none; }
+
+        /* Success Modal */
+        .success-modal { max-width:400px; text-align:center; }
+        .success-body { padding:3rem 2rem; }
+        .success-icon { font-size:4rem; margin-bottom:1rem; animation:bounce-in 0.6s ease; }
+        @keyframes bounce-in { 0%{transform:scale(0);} 60%{transform:scale(1.2);} 100%{transform:scale(1);} }
+        .success-title { font-size:1.4rem; font-weight:800; margin-bottom:0.5rem; }
+        .success-sub { color:var(--text-muted); font-size:0.9rem; line-height:1.6; margin-bottom:1.5rem; }
+        .success-order-id { background:var(--bg); border-radius:var(--radius-sm); padding:0.75rem; font-family:monospace; font-size:1rem; font-weight:700; color:var(--primary); margin-bottom:1.5rem; }
+        .btn-success-wa { width:100%; padding:0.9rem; border-radius:var(--radius-sm); border:none; cursor:pointer; background:#25d366; color:white; font-size:0.95rem; font-weight:800; display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-bottom:0.75rem; transition:all 0.2s; }
+        .btn-success-wa:hover { background:#1da855; }
+        .btn-success-close { width:100%; padding:0.7rem; border-radius:var(--radius-sm); border:1.5px solid var(--border); cursor:pointer; background:white; color:var(--text-muted); font-size:0.85rem; font-weight:600; transition:all 0.2s; }
+        .btn-success-close:hover { border-color:var(--danger); color:var(--danger); }
+
+        /* ===== FOOTER ===== */
+        footer { background:white; border-top:1px solid var(--border); padding:2rem 1.5rem; text-align:center; margin-top:3rem; }
+        .footer-inner { max-width:1200px; margin:0 auto; }
+        .footer-logo { font-size:1.1rem; font-weight:800; color:var(--text); margin-bottom:0.5rem; }
+        .footer-logo span { color:var(--primary); }
+        .footer-text { font-size:0.8rem; color:var(--text-muted); margin-bottom:0.25rem; }
+        .footer-link { font-size:0.75rem; color:var(--primary); }
+        .footer-link:hover { text-decoration:underline; }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:768px) {
+            .header-search { display:none; }
+            .hero-stats { gap:1.5rem; }
+            .products-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:0.75rem; }
+            .cart-sidebar { width:100%; }
+            .form-grid { grid-template-columns:1fr; }
+            .btn-wa .wa-text { display:none; }
+        }
+        @media(max-width:480px) {
+            .products-grid { grid-template-columns:1fr 1fr; }
+            .product-body { padding:0.8rem; }
+            .product-name { font-size:0.82rem; }
+            .product-price { font-size:0.95rem; }
+            .btn-cart { padding:0.4rem 0.65rem; font-size:0.72rem; }
+        }
+
+        /* ===== TOAST ===== */
+        #toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#111827; color:white; padding:0.7rem 1.5rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:600; z-index:9999; opacity:0; transition:all 0.3s; pointer-events:none; white-space:nowrap; box-shadow:var(--shadow-lg); }
+        #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* ===== LOADER ===== */
+        .page-loader { display:flex; align-items:center; justify-content:center; padding:4rem; }
+        .spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg);} }
+    </style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- HEADER -->
+<header>
+    <div class="header-inner">
+        <a href="#" class="logo">
+            <div class="logo-icon">C</div>
+            <span class="logo-text">Craftor<span>aweb</span></span>
+        </a>
+        <div class="header-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Cari layanan..." oninput="filterProducts()">
+        </div>
+        <div class="header-actions">
+            <a href="https://wa.me/6287825019502?text=Halo%20Craftoraweb%2C%20saya%20ingin%20konsultasi" target="_blank" class="btn-wa">
+                <span>💬</span><span class="wa-text">WhatsApp</span>
+            </a>
+            <button class="cart-btn" onclick="openCart()">
+                🛒
+                <span class="cart-badge" id="cart-badge">0</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">🚀 Katalog Layanan Digital</div>
+        <h1>Wujudkan Bisnis <span>Digital Kamu</span> Sekarang</h1>
+        <p>Website profesional, desain kreatif, dan solusi digital terlengkap dengan harga terjangkau. Pesan sekarang, bayar mudah!</p>
+        <div class="hero-stats">
+            <div class="hero-stat"><div class="hero-stat-num">50+</div><div class="hero-stat-label">Website Dibuat</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label">Kepuasan Client</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">3 Hari</div><div class="hero-stat-label">Pengerjaan Cepat</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">24/7</div><div class="hero-stat-label">Support Aktif</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories-wrap">
+    <div class="categories" id="categories">
+        <button class="cat-pill active" onclick="setCategory('semua','this')" data-cat="semua">✨ Semua</button>
+        <button class="cat-pill" onclick="setCategory('website','this')" data-cat="website">🌐 Website</button>
+        <button class="cat-pill" onclick="setCategory('desain','this')" data-cat="desain">🎨 Desain</button>
+        <button class="cat-pill" onclick="setCategory('marketing','this')" data-cat="marketing">📣 Marketing</button>
+        <button class="cat-pill" onclick="setCategory('maintenance','this')" data-cat="maintenance">🔧 Maintenance</button>
+        <button class="cat-pill" onclick="setCategory('undangan','this')" data-cat="undangan">💌 Undangan</button>
+    </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products-section">
+    <div class="products-header">
+        <div class="products-count" id="products-count">Menampilkan semua layanan</div>
+        <select class="sort-select" onchange="sortProducts(this.value)">
+            <option value="default">Urutkan</option>
+            <option value="price-asc">Harga: Termurah</option>
+            <option value="price-desc">Harga: Termahal</option>
+            <option value="name-asc">Nama: A-Z</option>
+        </select>
+    </div>
+    <div class="products-grid" id="products-grid">
+        <div class="page-loader" style="grid-column:1/-1"><div class="spinner"></div></div>
+    </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+        <div class="cart-title">🛒 Keranjang <span id="cart-count-title" style="color:var(--primary);font-size:0.9rem">(0)</span></div>
+        <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cart-body">
+        <div class="cart-empty">
+            <div class="cart-empty-icon">🛒</div>
+            <p style="font-weight:600;margin-bottom:0.25rem">Keranjang masih kosong</p>
+            <p style="font-size:0.85rem;color:var(--text-light)">Yuk pilih layanan yang kamu butuhkan!</p>
+        </div>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+        <div class="cart-subtotal"><span>Subtotal</span><span id="cart-subtotal">Rp 0</span></div>
+        <div class="cart-total">
+            <span class="cart-total-label">Total Pembayaran</span>
+            <span class="cart-total-num" id="cart-total">Rp 0</span>
+        </div>
+        <button class="btn-checkout" onclick="openCheckout()">🚀 Lanjut Checkout</button>
+        <button class="btn-clear-cart" onclick="clearCart()">🗑️ Kosongkan Keranjang</button>
+    </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal-overlay" onclick="closeProductModal(event)">
+    <div class="modal" id="product-modal">
+        <button class="modal-close-btn" onclick="closeProductModal(null,true)">✕</button>
+        <img class="pmodal-img" id="pmodal-img" src="" alt="">
+        <div class="pmodal-body">
+            <div class="pmodal-cat" id="pmodal-cat"></div>
+            <div class="pmodal-name" id="pmodal-name"></div>
+            <div class="pmodal-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-num" id="pmodal-rating"></span>
+            </div>
+            <div class="pmodal-desc" id="pmodal-desc"></div>
+            <div class="pmodal-features">
+                <h4>Yang Kamu Dapatkan</h4>
+                <div class="feature-list" id="pmodal-features"></div>
+            </div>
+            <div class="pmodal-footer">
+                <div class="pmodal-price-wrap">
+                    <div class="pmodal-price" id="pmodal-price"></div>
+                    <div class="pmodal-price-old" id="pmodal-price-old"></div>
+                </div>
+                <div class="pmodal-actions">
+                    <button class="btn-modal-wa" id="pmodal-wa-btn">💬 WA</button>
+                    <button class="btn-modal-cart" id="pmodal-cart-btn">🛒 Tambah</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal-overlay" onclick="closeCheckoutModal(event)">
+    <div class="modal checkout-modal" onclick="event.stopPropagation()">
+        <div class="checkout-header">
+            <h2>📋 Checkout</h2>
+            <button class="cart-close" onclick="closeCheckoutModal(null,true)">✕</button>
+        </div>
+        <div class="checkout-body">
+            <div class="checkout-section">
+                <h3>📦 Ringkasan Pesanan</h3>
+                <div class="order-summary" id="order-summary"></div>
+            </div>
+            <div class="checkout-section">
+                <h3>👤 Data Pemesan</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nama Lengkap <span>*</span></label>
+                        <input type="text" class="form-input" id="order-name" placeholder="Nama kamu">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">No. WhatsApp <span>*</span></label>
+                        <input type="tel" class="form-input" id="order-phone" placeholder="08xx-xxxx-xxxx">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="order-email" placeholder="email@kamu.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Catatan / Brief Projek</label>
+                    <textarea class="form-textarea" id="order-notes" placeholder="Ceritakan kebutuhanmu... (warna, referensi, dll)"></textarea>
+                </div>
+            </div>
+            <div class="checkout-section">
+                <h3>💳 Metode Konfirmasi</h3>
+                <div class="payment-options">
+                    <label class="payment-opt selected" onclick="selectPayment(this)">
+                        <input type="radio" name="payment" value="wa" checked>
+                        <span class="payment-opt-icon">💬</span>
+                        <div class="payment-opt-info">
+                            <div class="payment-opt-name">Via WhatsApp</div>
+                            <div class="payment-opt-desc">Diskusi & konfirmasi pembayaran lewat WA</div>
+                        </div>
+                    </label>
+                    <label class="payment-opt" onclick="selectPayment(this)">
+                        <input type="radio" name="payment" value="transfer">
+                        <span class="payment-opt-icon">🏦</span>
+                        <div class="payment-opt-info">
+                            <div class="payment-opt-name">Transfer Bank</div>
+                            <div class="payment-opt-desc">BCA / BRI / Mandiri / BSI</div>
+                        </div>
+                    </label>
+                    <label class="payment-opt" onclick="selectPayment(this)">
+                        <input type="radio" name="payment" value="qris">
+                        <span class="payment-opt-icon">📱</span>
+                        <div class="payment-opt-info">
+                            <div class="payment-opt-name">QRIS</div>
+                            <div class="payment-opt-desc">GoPay, OVO, DANA, dll</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <button class="btn-place-order" id="place-order-btn" onclick="placeOrder()">✅ Buat Pesanan</button>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="success-modal-overlay">
+    <div class="modal success-modal" onclick="event.stopPropagation()">
+        <div class="success-body">
+            <div class="success-icon">🎉</div>
+            <div class="success-title">Pesanan Masuk!</div>
+            <div class="success-sub">Pesananmu sudah kami terima. Tim Craftoraweb akan segera menghubungi kamu untuk konfirmasi lebih lanjut.</div>
+            <div class="success-order-id" id="success-order-id">#CR-000000</div>
+            <button class="btn-success-wa" id="btn-wa-order">💬 Chat WhatsApp Sekarang</button>
+            <button class="btn-success-close" onclick="closeSuccessModal()">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-logo">Craftor<span>aweb</span></div>
+        <p class="footer-text">Solusi digital profesional untuk bisnis kamu 🚀</p>
+        <a href="https://www.craftoraweb.site" target="_blank" class="footer-link">www.craftoraweb.site</a>
+    </div>
+</footer>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+firebase.initializeApp({
+    apiKey:"AIzaSyBbbikkiKR4nHF13nlcZbRL4NaX4VMxqXs",
+    authDomain:"undangan-nikah-a934d.firebaseapp.com",
+    databaseURL:"https://undangan-nikah-a934d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId:"undangan-nikah-a934d",
+    storageBucket:"undangan-nikah-a934d.firebasestorage.app",
+    messagingSenderId:"512826118681",
+    appId:"1:512826118681:web:7336f1e5a33fbbe5881088"
+});
+const db = firebase.database();
+</script>
+
+<script>
+// ===== PRODUCTS DATA =====
+const PRODUCTS = [
+    { id:1, name:'Landing Page Bisnis', cat:'website', price:500000, oldPrice:750000, rating:'4.9 (48 ulasan)', badge:'hot', img:'https://picsum.photos/seed/web1/800/600', desc:'Landing page modern & responsif untuk bisnis kamu. Desain profesional, SEO-friendly, siap dalam 3 hari kerja.', features:['Desain custom sesuai branding','Responsif semua perangkat','SEO dasar teroptimasi','Form kontak / WhatsApp button','Revisi 3x','Domain & hosting tidak termasuk'] },
+    { id:2, name:'Website Company Profile', cat:'website', price:1200000, oldPrice:1800000, rating:'5.0 (32 ulasan)', badge:'best', img:'https://picsum.photos/seed/web2/800/600', desc:'Website company profile lengkap dengan halaman About, Services, Portfolio, dan Contact. Tampil profesional di mata klien.', features:['5-7 halaman lengkap','Desain premium custom','CMS sederhana','Integrasi Google Maps','SEO on-page','Gratis domain .com 1 tahun'] },
+    { id:3, name:'Toko Online / E-Commerce', cat:'website', price:2500000, oldPrice:3500000, rating:'4.8 (21 ulasan)', badge:'new', img:'https://picsum.photos/seed/web3/800/600', desc:'Toko online lengkap dengan sistem keranjang belanja, pembayaran, dan manajemen produk. Siap jualan online!', features:['Unlimited produk','Sistem cart & checkout','Integrasi payment gateway','Dashboard admin','Laporan penjualan','Support 3 bulan'] },
+    { id:4, name:'Undangan Digital Nikah', cat:'undangan', price:350000, oldPrice:500000, rating:'5.0 (67 ulasan)', badge:'hot', img:'https://picsum.photos/seed/web4/800/600', desc:'Undangan pernikahan digital yang elegan & beranimasi. Lengkap dengan musik, countdown, RSVP, dan ucapan tamu.', features:['Desain eksklusif custom','Animasi full','Musik background','Countdown timer','Form RSVP','Ucapan tamu real-time'] },
+    { id:5, name:'Undangan Digital Ultah', cat:'undangan', price:250000, oldPrice:350000, rating:'4.9 (43 ulasan)', badge:'new', img:'https://picsum.photos/seed/web5/800/600', desc:'Undangan ulang tahun digital yang fun & colorful! Lengkap dengan konfetti, musik, countdown, dan form ucapan.', features:['Tema fun & colorful','Konfetti animasi','Musik YouTube custom','Form ucapan tamu','Countdown hari H','Craftoraweb branding'] },
+    { id:6, name:'Desain Logo Profesional', cat:'desain', price:200000, oldPrice:300000, rating:'4.8 (89 ulasan)', badge:'best', img:'https://picsum.photos/seed/web6/800/600', desc:'Logo profesional yang mencerminkan identitas brand kamu. Dikirim dalam format PNG, JPG, SVG, dan AI.', features:['3 konsep desain awal','Revisi tidak terbatas','File PNG, JPG, SVG, AI','Panduan penggunaan logo','Hak cipta penuh','Pengerjaan 2-3 hari'] },
+    { id:7, name:'Desain Banner & Konten', cat:'desain', price:150000, oldPrice:200000, rating:'4.7 (112 ulasan)', badge:null, img:'https://picsum.photos/seed/web7/800/600', desc:'Paket desain banner, flyer, dan konten media sosial yang menarik dan siap pakai.', features:['5 desain konten','Format feed & story','Revisi 2x per desain','File siap upload','Konsisten dengan brand','Pengerjaan 1-2 hari'] },
+    { id:8, name:'Kelola Media Sosial', cat:'marketing', price:800000, oldPrice:1200000, rating:'4.9 (28 ulasan)', badge:'new', img:'https://picsum.photos/seed/web8/800/600', desc:'Jasa kelola akun Instagram/Facebook/TikTok secara profesional. Konten kreatif, jadwal rutin, dan laporan bulanan.', features:['12 konten/bulan','Caption copywriting','Jadwal posting optimal','Reply komentar','Laporan insight bulanan','Strategi pertumbuhan'] },
+    { id:9, name:'SEO Optimization', cat:'marketing', price:600000, oldPrice:900000, rating:'4.8 (19 ulasan)', badge:null, img:'https://picsum.photos/seed/web9/800/600', desc:'Optimalkan website kamu agar muncul di halaman pertama Google. Teknik SEO white-hat yang aman dan efektif.', features:['Audit SEO menyeluruh','Optimasi on-page','Riset kata kunci','Submit Google Search Console','Sitemap & robots.txt','Laporan ranking bulanan'] },
+    { id:10, name:'Maintenance Website', cat:'maintenance', price:300000, oldPrice:450000, rating:'5.0 (35 ulasan)', badge:null, img:'https://picsum.photos/seed/web10/800/600', desc:'Jasa perawatan website bulanan. Update konten, backup rutin, monitoring uptime, dan perbaikan bug.', features:['Update konten 4x/bulan','Backup mingguan','Monitoring 24/7','Perbaikan bug','Update plugin/tema','Laporan performa'] },
+    { id:11, name:'Google Ads Management', cat:'marketing', price:500000, oldPrice:700000, rating:'4.7 (15 ulasan)', badge:null, img:'https://picsum.photos/seed/web11/800/600', desc:'Kelola iklan Google Ads kamu agar lebih efektif dan hemat budget. Targeting tepat, konversi maksimal.', features:['Setup kampanye baru','Riset kata kunci iklan','Optimasi iklan rutin','A/B testing','Laporan performa','Budget Ads tidak termasuk'] },
+    { id:12, name:'Paket Starter Bisnis', cat:'website', price:1800000, oldPrice:2800000, rating:'5.0 (8 ulasan)', badge:'hot', img:'https://picsum.photos/seed/web12/800/600', desc:'Paket lengkap untuk bisnis yang baru mulai. Website + Logo + 1 bulan kelola sosmed + SEO dasar.', features:['Landing page profesional','Logo custom','Kelola sosmed 1 bulan','SEO dasar','Revisi unlimited','Support 6 bulan'] },
+];
+
+let cart = [];
+let activeCategory = 'semua';
+let searchQuery = '';
+let sortOrder = 'default';
+let currentProduct = null;
+let selectedPayment = 'wa';
+
+// ===== RENDER PRODUCTS =====
+function formatPrice(p) { return 'Rp ' + p.toLocaleString('id-ID'); }
+
+function renderProducts() {
+    const grid = document.getElementById('products-grid');
+    let filtered = PRODUCTS.filter(p => {
+        const matchCat = activeCategory === 'semua' || p.cat === activeCategory;
+        const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.desc.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchCat && matchSearch;
+    });
+    if (sortOrder === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+    else if (sortOrder === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+    else if (sortOrder === 'name-asc') filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+    document.getElementById('products-count').textContent = `Menampilkan ${filtered.length} layanan`;
+
+    if (!filtered.length) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><h3>Layanan tidak ditemukan</h3><p style="font-size:0.85rem">Coba kata kunci lain</p></div>';
+        return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+        const inCart = cart.find(c => c.id === p.id);
+        const badgeHtml = p.badge ? `<span class="product-badge badge-${p.badge}">${p.badge==='hot'?'🔥 Hot':p.badge==='new'?'✨ New':'⭐ Best'}</span>` : '';
+        return `<div class="product-card" onclick="openProductModal(${p.id})">
+            <div class="product-img">
+                <img src="${p.img}" alt="${p.name}" loading="lazy">
+                ${badgeHtml}
+                <button class="product-wishlist" onclick="event.stopPropagation();toggleWishlist(this)" title="Simpan">🤍</button>
+            </div>
+            <div class="product-body">
+                <div class="product-category">${p.cat}</div>
+                <div class="product-name">${p.name}</div>
+                <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-num">${p.rating}</span></div>
+                <div class="product-desc">${p.desc}</div>
+                <div class="product-footer">
+                    <div><div class="product-price">${formatPrice(p.price)}</div>${p.oldPrice?'<div class="product-price-old">'+formatPrice(p.oldPrice)+'</div>':''}</div>
+                    <button class="btn-cart ${inCart?'added':''}" onclick="event.stopPropagation();addToCart(${p.id})">
+                        ${inCart?'✅ Ditambah':'🛒 Tambah'}
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function setCategory(cat, el) {
+    activeCategory = cat;
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.cat-pill').forEach(p => { if(p.dataset.cat===cat) p.classList.add('active'); });
+    renderProducts();
+}
+
+function filterProducts() { searchQuery = document.getElementById('search-input').value; renderProducts(); }
+function sortProducts(val) { sortOrder = val; renderProducts(); }
+
+// ===== PRODUCT MODAL =====
+function openProductModal(id) {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+    currentProduct = p;
+    document.getElementById('pmodal-img').src = p.img;
+    document.getElementById('pmodal-cat').textContent = p.cat.toUpperCase();
+    document.getElementById('pmodal-name').textContent = p.name;
+    document.getElementById('pmodal-rating').textContent = p.rating;
+    document.getElementById('pmodal-desc').textContent = p.desc;
+    document.getElementById('pmodal-price').textContent = formatPrice(p.price);
+    document.getElementById('pmodal-price-old').textContent = p.oldPrice ? formatPrice(p.oldPrice) : '';
+    document.getElementById('pmodal-features').innerHTML = p.features.map(f => `<div class="feature-item"><span class="check">✅</span><span>${f}</span></div>`).join('');
+    const inCart = cart.find(c => c.id === p.id);
+    const cartBtn = document.getElementById('pmodal-cart-btn');
+    cartBtn.textContent = inCart ? '✅ Ada di Keranjang' : '🛒 Tambah ke Keranjang';
+    cartBtn.onclick = () => { addToCart(p.id); closeProductModal(null,true); };
+    document.getElementById('pmodal-wa-btn').onclick = () => {
+        const msg = `Halo Craftoraweb! Saya tertarik dengan layanan *${p.name}* (${formatPrice(p.price)}). Boleh info lebih lanjut?`;
+        window.open(`https://wa.me/6287825019502?text=${encodeURIComponent(msg)}`,'_blank');
+    };
+    document.getElementById('product-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeProductModal(e, force) {
+    if (!force && e && e.target !== document.getElementById('product-modal-overlay')) return;
+    document.getElementById('product-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// ===== CART =====
+function addToCart(id) {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+    const existing = cart.find(c => c.id === id);
+    if (existing) { existing.qty++; }
+    else { cart.push({...p, qty:1}); }
+    updateCartUI();
+    renderProducts();
+    showToast(`✅ ${p.name} ditambahkan!`);
+}
+function removeFromCart(id) {
+    cart = cart.filter(c => c.id !== id);
+    updateCartUI();
+    renderProducts();
+}
+function updateQty(id, delta) {
+    const item = cart.find(c => c.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) { removeFromCart(id); return; }
+    updateCartUI();
+}
+function clearCart() {
+    if (!confirm('Kosongkan keranjang?')) return;
+    cart = [];
+    updateCartUI();
+    renderProducts();
+    closeCart();
+}
+function getTotal() { return cart.reduce((s,c) => s + c.price * c.qty, 0); }
+function getCount() { return cart.reduce((s,c) => s + c.qty, 0); }
+
+function updateCartUI() {
+    const count = getCount();
+    const total = getTotal();
+    const badge = document.getElementById('cart-badge');
+    badge.textContent = count;
+    count > 0 ? badge.classList.add('show') : badge.classList.remove('show');
+    document.getElementById('cart-count-title').textContent = `(${count})`;
+    document.getElementById('cart-subtotal').textContent = formatPrice(total);
+    document.getElementById('cart-total').textContent = formatPrice(total);
+
+    const body = document.getElementById('cart-body');
+    const footer = document.getElementById('cart-footer');
+    if (!cart.length) {
+        body.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p style="font-weight:600;margin-bottom:0.25rem">Keranjang masih kosong</p><p style="font-size:0.85rem;color:var(--text-light)">Yuk pilih layanan yang kamu butuhkan!</p></div>';
+        footer.style.display = 'none';
+    } else {
+        body.innerHTML = cart.map(c => `
+            <div class="cart-item">
+                <div class="cart-item-img"><img src="${c.img}" alt="${c.name}"></div>
+                <div class="cart-item-info">
+                    <div class="cart-item-cat">${c.cat}</div>
+                    <div class="cart-item-name">${c.name}</div>
+                    <div class="cart-item-bottom">
+                        <div class="cart-item-price">${formatPrice(c.price * c.qty)}</div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQty(${c.id},-1)">−</button>
+                            <span class="qty-num">${c.qty}</span>
+                            <button class="qty-btn" onclick="updateQty(${c.id},1)">+</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="cart-item-del" onclick="removeFromCart(${c.id})">🗑️</button>
+            </div>`).join('');
+        footer.style.display = 'block';
+    }
+}
+
+function openCart() {
+    document.getElementById('cart-sidebar').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+    document.getElementById('cart-sidebar').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// ===== CHECKOUT =====
+function openCheckout() {
+    if (!cart.length) return;
+    closeCart();
+    const summary = document.getElementById('order-summary');
+    const total = getTotal();
+    summary.innerHTML = cart.map(c => `<div class="order-item"><span class="order-item-name">${c.name} x${c.qty}</span><span class="order-item-price">${formatPrice(c.price*c.qty)}</span></div>`).join('') +
+        `<div class="order-divider"></div><div class="order-total-row"><span class="order-total-label">Total</span><span class="order-total-price">${formatPrice(total)}</span></div>`;
+    document.getElementById('checkout-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeCheckoutModal(e, force) {
+    if (!force && e && e.target !== document.getElementById('checkout-modal-overlay')) return;
+    document.getElementById('checkout-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function selectPayment(el) {
+    document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPayment = el.querySelector('input').value;
+}
+
+function placeOrder() {
+    const name = document.getElementById('order-name').value.trim();
+    const phone = document.getElementById('order-phone').value.trim();
+    const email = document.getElementById('order-email').value.trim();
+    const notes = document.getElementById('order-notes').value.trim();
+    if (!name || !phone) { showToast('⚠️ Nama & nomor WA wajib diisi!'); return; }
+
+    const btn = document.getElementById('place-order-btn');
+    btn.disabled = true; btn.textContent = 'Memproses...';
+
+    const orderId = 'CR-' + Date.now().toString().slice(-6);
+    const orderData = {
+        orderId, name, phone, email, notes,
+        payment: selectedPayment,
+        items: cart.map(c => ({id:c.id, name:c.name, qty:c.qty, price:c.price, subtotal:c.price*c.qty})),
+        total: getTotal(),
+        status: 'pending',
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    db.ref('orders').push(orderData).then(() => {
+        closeCheckoutModal(null, true);
+        document.body.style.overflow = 'hidden';
+
+        document.getElementById('success-order-id').textContent = '#' + orderId;
+        const waMsg = `Halo Craftoraweb! 👋\n\nSaya baru saja membuat pesanan:\n*Order ID:* #${orderId}\n*Nama:* ${name}\n*Total:* ${formatPrice(getTotal())}\n\n*Detail Pesanan:*\n${cart.map(c=>` - ${c.name} x${c.qty}: ${formatPrice(c.price*c.qty)}`).join('\n')}\n\n*Metode:* ${selectedPayment}\n${notes?'\n*Catatan:* '+notes:''}\n\nMohon konfirmasinya ya 🙏`;
+        document.getElementById('btn-wa-order').onclick = () => window.open(`https://wa.me/6287825019502?text=${encodeURIComponent(waMsg)}`,'_blank');
+        document.getElementById('success-modal-overlay').classList.add('open');
+
+        cart = [];
+        updateCartUI();
+        renderProducts();
+        btn.disabled = false; btn.textContent = '✅ Buat Pesanan';
+        document.getElementById('rsvp-form') && document.getElementById('rsvp-form').reset();
+    }).catch(() => {
+        showToast('❌ Gagal membuat pesanan, coba lagi!');
+        btn.disabled = false; btn.textContent = '✅ Buat Pesanan';
+    });
+}
+
+function closeSuccessModal() {
+    document.getElementById('success-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// ===== WISHLIST =====
+function toggleWishlist(btn) {
+    btn.classList.toggle('liked');
+    btn.textContent = btn.classList.contains('liked') ? '❤️' : '🤍';
+}
+
+// ===== TOAST =====
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== INIT =====
+setTimeout(renderProducts, 500);
+</script>
+</body>
+</html>
